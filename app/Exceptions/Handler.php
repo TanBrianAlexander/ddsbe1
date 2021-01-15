@@ -69,6 +69,11 @@ class Handler extends ExceptionHandler
             $errors = $exception->validator->errors()->getMessages();
             return $this->errorResponse($errors,Response::HTTP_UNPROCESSABLE_ENTITY);
         }
+        if ($exception instanceof ClientException) {
+            $message = $exception->getResponse()->getBody();
+            $code = $exception->getCode();
+            return $this->errorMessage($message,200);
+        }
     // access to forbidden
         if ($exception instanceof AuthorizationException) {return $this->errorResponse($exception->getMessage(),Response::HTTP_FORBIDDEN);
         }           
